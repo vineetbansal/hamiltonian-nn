@@ -14,6 +14,10 @@ def hamiltonian_fn(coords):
 
 def dynamics_fn(t, coords):
     dcoords = autograd.grad(hamiltonian_fn)(coords)
+    # This could have been written more clearly as:
+    # dHdq, dHdp = np.split(dcoords,2)
+    # dqdt, dpdt = dHdp, -dHdq
+    # S = np.concatenate([dqdt, dpdt], axis=-1)
     dqdt, dpdt = np.split(dcoords,2)
     S = np.concatenate([dpdt, -dqdt], axis=-1)
     return S

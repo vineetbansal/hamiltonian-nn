@@ -25,7 +25,8 @@ class HNN(torch.nn.Module):
 
         y = self.differentiable_model(x)
         assert y.dim() == 2 and y.shape[1] == 2, "Output tensor should have shape [batch_size, 2]"
-        return y.split(1,1)
+        conservative_field_values, solenoidal_field_values = y.split(1, 1)
+        return conservative_field_values, solenoidal_field_values
 
     def rk4_time_derivative(self, x, dt):
         return rk4(fun=self.time_derivative, y0=x, t=0, dt=dt)
